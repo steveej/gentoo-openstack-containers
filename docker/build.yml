@@ -1,0 +1,71 @@
+---
+metadata:
+  from: "steveej/gentoo-base:latest"
+  maintainer: "Stefan Junker <code@stefanjunker.de>"
+  
+containers:
+  cinder:
+    packages:
+      sys-cluster/cinder:
+        install: Yes
+        version: 2014.1.2*
+        use:
+          +: [mysql]
+
+  glance:
+    packages:
+      app-admin/glance:
+        install: Yes
+        version: 2014.1.2*
+        use:
+          +: [mysql]
+
+  horizon:
+    packages:
+      www-apps/horizon:
+        install: Yes
+        version: 2014.1.2*
+
+  keystone:
+    packages:
+      sys-auth/keystone:
+        install: Yes
+        version: 2014.1.2*
+        use: 
+          +: [mysql]
+
+  neutron:
+    packages:
+      sys-cluster/neutron:
+        install: No
+        version: 2014.1.2*
+        use:
+          +: [mysql, metadata, server, openvswitch, l3, linuxbridge, dhcp]
+      net-misc/openvswitch:
+        install: No
+        version: 2.3*
+        use:
+          -: [modules]
+
+  nova:
+    use:
+      +: [rbd, spice, usbredir, xen]
+    packages:
+      sys-cluster/nova:
+        install: Yes
+        version: 2014.1.2*
+        use:
+          +: [mysql]
+      net-misc/openvswitch:
+        install: No
+        version: 2.3*
+        use:
+          -: [modules]
+
+  swift:
+    packages:
+      sys-cluster/swift:
+        install: Yes
+        version: 2014.1.9999
+        use:
+          +: [account, container, object, proxy]

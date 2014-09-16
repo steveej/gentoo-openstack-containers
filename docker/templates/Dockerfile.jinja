@@ -1,0 +1,27 @@
+FROM {{ metadata.from }}
+MAINTAINER {{ metadata.maintainer }}
+
+RUN \ 
+{% if container.use is defined %}
+{% for sign, flags in container.use.iteritems() %}
+{% for flag in flags %}
+		flaggie {{ sign }}use::{{ flag }} && \
+{% endfor %}
+{% endfor %}
+{% endif %}
+		true
+
+
+{#
+{% if builder.package_use %}
+RUN euse -E {{ builder.package.use }} -p ={{ builder.package_name }}-{{ builder.package_version }}
+{% endif %}
+
+{% if builder.package_atom %}
+RUN emerge --autounmask-write {{ builder.package_atom }} -DNuvk
+etc-update --automode -5
+RUN emerge {{ builder.package_atom }} -DNuvk
+{% else %}
+RUN emerge {{ builder.package_name }} -DNuvk
+{% endif %} 
+#}

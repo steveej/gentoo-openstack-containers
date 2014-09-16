@@ -1,0 +1,37 @@
+portage:
+  build: portage
+
+cinder:
+  build: cinder
+  volumes_from:
+  - portage
+
+glance:
+  build: glance
+  volumes_from:
+  - portage
+
+horizon:
+  build: horizon
+  volumes_from:
+  - portage
+
+keystone:
+  build: keystone
+  volumes_from:
+  - portage
+
+neutron:
+  build: neutron
+  volumes_from:
+  - portage
+
+nova:
+  build: nova
+  volumes_from:
+  - portage
+  
+swift:
+  build: swift
+  volumes_from:
+  - portage
