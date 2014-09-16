@@ -4,6 +4,9 @@ metadata:
   maintainer: "Stefan Junker <code@stefanjunker.de>"
   
 containers:
+  portage:
+    packages: {}
+    
   cinder:
     packages:
       sys-cluster/cinder:

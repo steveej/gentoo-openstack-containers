@@ -1,6 +1,7 @@
 FROM {{ metadata.from }}
 MAINTAINER {{ metadata.maintainer }}
 
+{% if global_flags|count > 0 %}
 RUN \ 
 {# Global USE #}
 {% for flag in global_flags %}
@@ -11,7 +12,10 @@ RUN \
 	flaggie {{ flags }} {{ atom }} && \
 {% endfor %}
 {# Unmask necessary and install #}
+{% endif %}
+{% if packages_install|count > 0 %}
 	emerge --autounmask-write {{ packages_install }} -DNuvk \
 	etc-update --automode -5 \
 	emerge {{ packages_install }} -DNuvk
+{% endif %}
 
