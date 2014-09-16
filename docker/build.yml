@@ -36,31 +36,31 @@ containers:
 
   neutron:
     packages:
-      sys-cluster/neutron:
-        install: No
-        version: 2014.1.2*
-        use:
-          +: [mysql, metadata, server, openvswitch, l3, linuxbridge, dhcp]
       net-misc/openvswitch:
         install: No
         version: 2.3*
         use:
           -: [modules]
+      sys-cluster/neutron:
+        install: Yes
+        version: 2014.1.2*
+        use:
+          +: [mysql, metadata, server, openvswitch, l3, linuxbridge, dhcp]
 
   nova:
     use:
       +: [rbd, spice, usbredir, xen]
     packages:
-      sys-cluster/nova:
-        install: Yes
-        version: 2014.1.2*
-        use:
-          +: [mysql]
       net-misc/openvswitch:
         install: No
         version: 2.3*
         use:
           -: [modules]
+      sys-cluster/nova:
+        install: Yes
+        version: 2014.1.2*
+        use:
+          +: [mysql]
 
   swift:
     packages:

@@ -2,26 +2,16 @@ FROM {{ metadata.from }}
 MAINTAINER {{ metadata.maintainer }}
 
 RUN \ 
-{% if container.use is defined %}
-{% for sign, flags in container.use.iteritems() %}
-{% for flag in flags %}
-		flaggie {{ sign }}use::{{ flag }} && \
+{# Global USE #}
+{% for flag in global_flags %}
+	flaggie {{ flag }} && \
 {% endfor %}
+{# Package USE #}
+{% for atom, flags in packages_use.iteritems() %}
+	flaggie {{ flags }} {{ atom }} && \
 {% endfor %}
-{% endif %}
-		true
+{# Unmask necessary and install #}
+	emerge --autounmask-write {{ packages_install }} -DNuvk \
+	etc-update --automode -5 \
+	emerge {{ packages_install }} -DNuvk
 
-
-{#
-{% if builder.package_use %}
-RUN euse -E {{ builder.package.use }} -p ={{ builder.package_name }}-{{ builder.package_version }}
-{% endif %}
-
-{% if builder.package_atom %}
-RUN emerge --autounmask-write {{ builder.package_atom }} -DNuvk
-etc-update --automode -5
-RUN emerge {{ builder.package_atom }} -DNuvk
-{% else %}
-RUN emerge {{ builder.package_name }} -DNuvk
-{% endif %} 
-#}

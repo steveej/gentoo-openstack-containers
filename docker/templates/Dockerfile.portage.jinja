@@ -1,0 +1,4 @@
+{% include 'Dockerfile.jinja' %}
+
+RUN eix-sync
+VOLUME ['/usr/portage']
