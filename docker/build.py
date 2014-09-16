@@ -56,13 +56,7 @@ def parse_objectdata(dataobject):
          
 def main():
     import os
-    from jinja2 import FileSystemLoader, Environment
-    # Load jinja
-    jinja_loader = FileSystemLoader("templates")
-    jinja_env = Environment(loader=jinja_loader,
-                            trim_blocks=True,
-                            lstrip_blocks=True)
-
+    from jinja2 import ChoiceLoader, PrefixLoader, FileSystemLoader, Environment
 
     print("Parsing configuration...")
     all_vars = parse_objectdata(load_yml())
@@ -70,8 +64,19 @@ def main():
     print("Rendering templates...")
     for container, single_vars in all_vars.iteritems():
         try:
+            # Load jinja templates from container or default path
+            default_template_loader = FileSystemLoader("templates")
+            jinja_loader = ChoiceLoader([
+                    default_template_loader, 
+                    FileSystemLoader(container),
+                    PrefixLoader({"!templates": default_template_loader})
+                ])
+            jinja_env = Environment(loader=jinja_loader,
+                                    trim_blocks=True,
+                                    lstrip_blocks=True)
+
             # Get the template and render it 
-            tmpl_file = jinja_env.get_template('Dockerfile.'+container+'.jinja')
+            tmpl_file = jinja_env.get_template('Dockerfile.jinja')
             rendered_file = tmpl_file.render(**single_vars)
             # To write to another file, use `file`
             if not os.path.exists(container):
