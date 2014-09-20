@@ -1,0 +1,34 @@
+---
+default:
+  from: No
+  maintainer: No
+  use:
+      +: []
+      -: []
+  packages:
+    use:
+        +: []
+        -: []
+    default:
+      install: Yes
+      package_prefix: ""
+      version_delim: ""
+      atom: ${package}
+      use:
+        +: []
+        -: []
+
+required:
+  from: ""
+  maintainer: ""
+
+commands:
+  packages:
+    use: 
+      +: euse -E ${use}
+      -: euse -D ${use}
+    package:
+      use: 
+        +: flaggie +use::${use} ${package}
+        -: flaggie -use::${use} ${package}
+      install: emerge --autounmask-write=y -DNkv ${atom} && etc-update --auto -5 && emerge -DNkv ${atom}

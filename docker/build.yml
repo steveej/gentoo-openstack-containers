@@ -1,74 +1,82 @@
 ---
-metadata:
+default:
   from: "steveej/gentoo-base:latest"
   maintainer: "Stefan Junker <code@stefanjunker.de>"
+  volumes_from:
+    - portage
+  packages:
+    default:
+      package_prefix: "="
+      version_delim: "-"
+      atom: "${package_prefix}${package}${version_delim}${version}"
   
-containers:
-  portage:
-    packages: {}
-    
-  cinder:
-    packages:
-      sys-cluster/cinder:
-        install: Yes
-        version: 2014.1.2*
-        use:
-          +: [mysql]
+portage:
+  volumes:
+    - /usr/portage
+  volumes_from: []
 
-  glance:
-    packages:
-      app-admin/glance:
-        install: Yes
-        version: 2014.1.2*
-        use:
-          +: [mysql]
+cinder:
+  packages:
+    sys-cluster/cinder:
+      install: Yes
+      version: 2014.1.2*
+      use:
+        +: [mysql]
 
-  horizon:
-    packages:
-      www-apps/horizon:
-        install: Yes
-        version: 2014.1.2*
+glance:
+  packages:
+    app-admin/glance:
+      install: Yes
+      version: 2014.1.2*
+      use:
+        +: [mysql]
 
-  keystone:
-    packages:
-      sys-auth/keystone:
-        install: Yes
-        version: 2014.1.2*
-        use: 
-          +: [mysql]
+horizon:
+  packages:
+    www-apps/horizon:
+      install: Yes
+      version: 2014.1.2*
 
-  neutron:
-    packages:
-      net-misc/openvswitch:
-        install: No
-        version: 2.3*
-        use:
-          -: [modules]
-      sys-cluster/neutron:
-        install: Yes
-        version: 2014.1.2*
-        use:
-          +: [mysql, metadata, server, openvswitch, l3, linuxbridge, dhcp]
+keystone:
+  packages:
+    sys-auth/keystone:
+      install: Yes
+      version: 2014.1.2*
+      use: 
+        +: [mysql]
 
-  nova:
+neutron:
+  packages:
+    net-misc/openvswitch:
+      install: No
+      version: 2.3*
+      use:
+        -: [modules]
+    sys-cluster/neutron:
+      install: Yes
+      version: 2014.1.2*
+      use:
+        +: [mysql, metadata, server, openvswitch, l3, linuxbridge, dhcp]
+
+nova:
+  packages:
     use:
       +: [rbd, spice, usbredir, xen]
-    packages:
-      net-misc/openvswitch:
-        install: No
-        version: 2.3*
-        use:
-          -: [modules]
-      sys-cluster/nova:
-        install: Yes
-        version: 2014.1.2*
-        use:
-          +: [mysql]
+    net-misc/openvswitch:
+      install: No
+      version: 2.3*
+      use:
+        -: [modules]
+    sys-cluster/nova:
+      version: 2014.1.2*
+      install: Yes
+      use:
+        +: [mysql]
 
-  swift:
-    packages:
-      sys-cluster/swift:
-        install: Yes
-        version: 2014.1.9999
-        use:
-          +: [account, container, object, proxy]
+swift:
+  packages:
+    sys-cluster/swift:
+      install: Yes
+      version: 2014.1.9999
+      use:
+        +: [account, container, object, proxy]
