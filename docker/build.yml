@@ -8,7 +8,6 @@ default:
     default:
       package_prefix: "="
       version_delim: "-"
-      atom: "${package_prefix}${package}${version_delim}${version}"
   
 portage:
   volumes:
@@ -48,20 +47,19 @@ keystone:
 neutron:
   packages:
     net-misc/openvswitch:
-      install: No
+      install: Yes
       version: 2.3*
       use:
         -: [modules]
     sys-cluster/neutron:
-      install: Yes
       version: 2014.1.2*
       use:
         +: [mysql, metadata, server, openvswitch, l3, linuxbridge, dhcp]
 
 nova:
+  use:
+    +: [rbd, spice, usbredir, xen]
   packages:
-    use:
-      +: [rbd, spice, usbredir, xen]
     net-misc/openvswitch:
       install: No
       version: 2.3*
@@ -69,7 +67,6 @@ nova:
         -: [modules]
     sys-cluster/nova:
       version: 2014.1.2*
-      install: Yes
       use:
         +: [mysql]
 
